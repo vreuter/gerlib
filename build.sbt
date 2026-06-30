@@ -182,7 +182,8 @@ lazy val compileSettings = Def.settings(
       "-rewrite",
       // for scalafix RemoveUnused: https://scalacenter.github.io/scalafix/docs/rules/RemoveUnused.html
       "-Wunused:all", 
-      // Warnings about an unused symbol are expected in some source files testing whether code compiles or not.
+      /* Warnings about an unused symbol are expected in some source files testing whether code compiles or not. */
+      "-Wconf:msg=unused import&src=./modules/geometry/src/test/scala/TestDistance.scala:silent",
       "-Wconf:msg=unused import&src=./modules/imaging/src/test/scala/TestImagingInstances.scala:silent",
       "-Wconf:msg=unused import&src=./modules/testing/src/test/scala/TestInstanceAvailability.scala:silent",
       "-Werror",

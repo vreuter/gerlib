@@ -1,12 +1,16 @@
 package at.ac.oeaw.imba.gerlich.gerlib.geometry
 
-import squants.space.*
-
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+
+import io.github.iltotore.iron.{:|, autoRefine}
+import io.github.iltotore.iron.constraint.any.Not
+import io.github.iltotore.iron.constraint.numeric.Negative
+import squants.space.*
+
 import at.ac.oeaw.imba.gerlich.gerlib.refinement.IllegalRefinement
 
 /** Tests for the refinement of a [[squants.space.Length]] value as a distance */
@@ -55,6 +59,24 @@ class TestDistance extends AnyFunSuite, should.Matchers, ScalaCheckPropertyCheck
     forAll { (l: Length, d: Distance) =>
       val dAsL: Length = d
       l < d shouldBe l < dAsL
+    }
+
+  test("EuclideanDistance.unsafe requires a length, not just int or nonnegative int."):
+    assertTypeError("EuclideanDistance.unsafe(2)") // plain Int prohibited
+    assertCompiles("2: Int :| Not[Negative]") // building nonnegative int works
+    assertTypeError("EuclideanDistance.unsafe(2: Int :| Not[Negative])") // nonnegative Int prohibited
+    assertCompiles("Nanometers(2)") // building Length works
+    assertCompiles("EuclideanDistance.unsafe(Nanometers(2))") // Length argument works
+
+  test("EuclideanDistance.unsafe is correct for a nonnegative length."):
+    forAll (Gen.choose(0, Int.MaxValue).map(Nanometers.apply)) { l => 
+      EuclideanDistance.unsafe(l).get shouldEqual Distance.applyUnsafe(l) 
+    }
+
+  test("EuclideanDistance.unsafe fails properly for a negative length."):
+    forAll (Gen.choose(Int.MinValue, -1).map(Nanometers.apply)) { l =>
+      val obsErr = intercept[IllegalArgumentException]{ EuclideanDistance.unsafe(l) }
+      obsErr.getMessage shouldEqual "Allegedly nonnegative length is actually negative."
     }
 
 end TestDistance
