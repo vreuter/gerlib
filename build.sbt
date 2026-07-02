@@ -52,7 +52,7 @@ ThisBuild / testOptions += Tests.Argument("-oF") // full stack traces
 
 lazy val root = project
   .in(file("."))
-  .aggregate(cell, geometry, graph, imaging, io, json, numeric, pan, refinement, roi, testing, zarr)
+  .aggregate(cell, configuration, geometry, graph, imaging, io, json, numeric, pan, refinement, roi, testing, zarr)
   .enablePlugins(BuildInfoPlugin)
   .settings(commonSettings)
   .settings(noPublishSettings)
@@ -64,6 +64,15 @@ lazy val root = project
 
 lazy val cell = defineModule("cell")(project)
   .dependsOn(numeric)
+
+lazy val configuration = defineModule("configuration")(project)
+  .dependsOn(imaging)
+  .settings(
+    libraryDependencies ++= Seq(
+      pureconfigCore,
+      pureconfigGeneric,
+    )
+  )
 
 lazy val geometry = defineModule("geometry")(project)
   .dependsOn(numeric, refinement)
