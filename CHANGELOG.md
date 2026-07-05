@@ -10,9 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `EuclideanDistance.unsafe` method, wrapping a `squants.space.Length` value as a `EuclideanDistance`, 
 performing the necessary validation as nonnegative and erroring otherwise.
 * `configuration` module, with support for parsing definition of pixel lengths for `scopt` or `pureconfig`.
+* Instances of `Show` and `SimpleShow` for `geometry.Distance`, with an implementation which can be guaranteed to roundtrip through `Distance.parse`
 
 ### Changed
 * Changed the error message for refinement of `squants.space.Length` as a `Distance` value from "Allegedly nonnegative length must actually be nonnegative." to "Allegedly nonnegative length is actually negative."
+
 
 ## [v0.5.2] - 2026-03-18
 
