@@ -14,7 +14,7 @@ performing the necessary validation as nonnegative and erroring otherwise.
 
 ### Changed
 * Changed the error message for refinement of `squants.space.Length` as a `Distance` value from "Allegedly nonnegative length must actually be nonnegative." to "Allegedly nonnegative length is actually negative."
-
+* Updated `sbt` to version 1.12.13
 
 ## [v0.5.2] - 2026-03-18
 
