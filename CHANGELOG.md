@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 performing the necessary validation as nonnegative and erroring otherwise.
 * `configuration` module, with support for parsing definition of pixel lengths for `scopt` or `pureconfig`.
 * Instances of `Show` and `SimpleShow` for `geometry.Distance`, with an implementation which can be guaranteed to roundtrip through `Distance.parse`
+* Tests for `PixelDefinition` and `Pixels3D`
 
 ### Changed
 * Changed the error message for refinement of `squants.space.Length` as a `Distance` value from "Allegedly nonnegative length must actually be nonnegative." to "Allegedly nonnegative length is actually negative."
