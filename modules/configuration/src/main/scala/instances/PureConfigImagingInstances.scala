@@ -14,10 +14,12 @@ trait PureConfigImagingInstances:
   given (ConfigReader[PixelDefinition]) => ConfigReader[Pixels3D] =
     deriveReader[Pixels3D]
 
-  given (readLength: ConfigReader[Length]) => ConfigReader[PixelDefinition] = 
-    readLength.emap(l => 
-      PixelDefinition.tryToDefine(l).leftMap(msg => 
-        CannotConvert(value = l.toString, toType = "PixelDefinition", because = msg)
-      )
+  given (readLength: ConfigReader[Length]) => ConfigReader[PixelDefinition] =
+    readLength.emap(l =>
+      PixelDefinition
+        .tryToDefine(l)
+        .leftMap(msg =>
+          CannotConvert(value = l.toString, toType = "PixelDefinition", because = msg)
+        )
     )
 end PureConfigImagingInstances

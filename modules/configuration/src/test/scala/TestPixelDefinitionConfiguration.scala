@@ -47,20 +47,19 @@ class TestPixelDefinitionConfiguration
 
     given Arbitrary[LengthUnit] = Arbitrary { genMicroOrNano }
 
-    forAll(minSuccessful(10000)) {
-      (x: Double, y: Double, z: Double, unit: LengthUnit) =>
-        val perX = 100
-        val perY = 200
-        val perZ = 400
-        val rawConfigData =
-          buildRawConfig(perX -> unit, perY -> unit, perZ -> unit)
-        ConfigSource.string(rawConfigData).load[Pixels3D] match {
-          case Left(errors) => fail(s"Errors: $errors")
-          case Right(scaling) =>
-            (scaling.liftX(x) in unit).value shouldEqual x * perX
-            (scaling.liftY(y) in unit).value shouldEqual y * perY
-            (scaling.liftZ(z) in unit).value shouldEqual z * perZ
-        }
+    forAll(minSuccessful(10000)) { (x: Double, y: Double, z: Double, unit: LengthUnit) =>
+      val perX = 100
+      val perY = 200
+      val perZ = 400
+      val rawConfigData =
+        buildRawConfig(perX -> unit, perY -> unit, perZ -> unit)
+      ConfigSource.string(rawConfigData).load[Pixels3D] match {
+      case Left(errors) => fail(s"Errors: $errors")
+      case Right(scaling) =>
+        (scaling.liftX(x) in unit).value shouldEqual x * perX
+        (scaling.liftY(y) in unit).value shouldEqual y * perY
+        (scaling.liftZ(z) in unit).value shouldEqual z * perZ
+      }
     }
 
   test("Pixels3D parse requires the correct combination (x, y, z) of keys."):
@@ -90,19 +89,18 @@ class TestPixelDefinitionConfiguration
 
     given [A] => Shrink[A] = Shrink.shrinkAny // no shrinking whatsoever
 
-    forAll(genInputAndExpectation, minSuccessful(1000)) {
-      (rawConfigData, shouldSucceed) =>
-        ConfigSource.string(rawConfigData).load[Pixels3D] match {
-          case Left(errors) =>
-            if !shouldSucceed then succeed
-            else
-              fail(
-                s"Expected succeess with $rawConfigData but failed: ${errors.prettyPrint}"
-              )
-          case Right(_) =>
-            if shouldSucceed then succeed
-            else fail(s"Expected failure with $rawConfigData but succeeded")
-        }
+    forAll(genInputAndExpectation, minSuccessful(1000)) { (rawConfigData, shouldSucceed) =>
+      ConfigSource.string(rawConfigData).load[Pixels3D] match {
+      case Left(errors) =>
+        if !shouldSucceed then succeed
+        else
+          fail(
+            s"Expected succeess with $rawConfigData but failed: ${errors.prettyPrint}"
+          )
+      case Right(_) =>
+        if shouldSucceed then succeed
+        else fail(s"Expected failure with $rawConfigData but succeeded")
+      }
     }
 
   test(
@@ -116,15 +114,15 @@ class TestPixelDefinitionConfiguration
     )
     forAll(inputsAndExpectations) { (rawConfigData, shouldSucceed) =>
       ConfigSource.string(rawConfigData).load[Pixels3D] match {
-        case Left(errors) =>
-          if !shouldSucceed then succeed
-          else
-            fail(
-              s"Expected succeess with $rawConfigData but failed: ${errors.prettyPrint}"
-            )
-        case Right(_) =>
-          if shouldSucceed then succeed
-          else fail(s"Expected failure with $rawConfigData but succeeded")
+      case Left(errors) =>
+        if !shouldSucceed then succeed
+        else
+          fail(
+            s"Expected succeess with $rawConfigData but failed: ${errors.prettyPrint}"
+          )
+      case Right(_) =>
+        if shouldSucceed then succeed
+        else fail(s"Expected failure with $rawConfigData but succeeded")
       }
 
     }

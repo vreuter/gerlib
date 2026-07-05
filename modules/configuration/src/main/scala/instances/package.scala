@@ -4,7 +4,5 @@ package at.ac.oeaw.imba.gerlich.gerlib.configuration
 package object instances:
   object all extends AllConfigurationInstances
 
-  trait AllConfigurationInstances
-      extends PureConfigImagingInstances,
-        PureConfigSquantsInstances
+  trait AllConfigurationInstances extends PureConfigImagingInstances, PureConfigSquantsInstances
 end instances
